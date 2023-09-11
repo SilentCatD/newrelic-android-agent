@@ -26,6 +26,7 @@ import com.newrelic.agent.android.util.NamedThreadFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import java.net.HttpURLConnection;
@@ -45,6 +46,10 @@ public class AgentDataSenderTest {
     private static AgentConfiguration agentConfiguration;
 
     private FlatBufferBuilder flat;
+
+    @InjectMocks
+    HttpURLConnection connection;
+
 
     @Before
     public void setUp() throws Exception {
@@ -161,7 +166,7 @@ public class AgentDataSenderTest {
     @Test
     public void testTimedoutUpload() throws Exception {
         AgentDataSender agentDataSender = spy(new AgentDataSender(flat.dataBuffer().slice().array(), agentConfiguration));
-        HttpURLConnection connection = spy(agentDataSender.getConnection());
+        connection = spy(agentDataSender.getConnection());
 
         doReturn(HttpsURLConnection.HTTP_CLIENT_TIMEOUT).when(connection).getResponseCode();
         agentDataSender.onRequestResponse(connection);

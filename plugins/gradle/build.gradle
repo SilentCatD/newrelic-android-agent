@@ -6,6 +6,7 @@
 plugins {
     id("groovy")
     id("org.jetbrains.kotlin.jvm")
+    id "com.gradle.plugin-publish" version "1.2.1"
 }
 
 import org.gradle.api.internal.classpath.ModuleRegistry
@@ -163,6 +164,21 @@ tasks.named('check') {
 
 artifacts {
     archives jar
+}
+
+gradlePlugin {
+    website = 'https://docs.newrelic.com/docs/mobile-monitoring/new-relic-mobile-android/get-started/introduction-new-relic-mobile-android/'
+    vcsUrl = 'https://github.com/newrelic/newrelic-android-agent'
+    plugins {
+        newrelicPlugin {
+            id = 'com.newrelic.agent.android'
+            implementationClass = 'com.newrelic.agent.android.NewRelicGradlePlugin'
+            displayName = 'New Relic Android Gradle Plugin'
+            description = 'The New Relic Android Gradle plugin instruments classes for Android applications'
+            tags.set(['monitoring', 'mobile', 'newrelic', 'android'])
+
+        }
+    }
 }
 
 apply from: "${rootDir}/gradle/publishing.gradle"
